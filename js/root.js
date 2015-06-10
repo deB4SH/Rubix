@@ -1,7 +1,25 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//
+console.log("[DEBUG]:[START ROOT.JS]");
 
+//local datafields
+var cubes = [];
+
+
+
+
+
+
+
+
+
+var cube = new Cube({
+    x: "1",
+    y: "1",
+    width: "100",
+    height: "100",
+    depth: "100",
+    rubixX: "-1",
+    rubixY: "-1",
+    color: "red"
+});
 
