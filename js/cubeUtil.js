@@ -1,6 +1,6 @@
 function createRubixCube(width, height, depth) {
     var cubes = [];
-    
+
     var geom = new THREE.BoxGeometry(width, height, depth, 15, 15, 15);
     var mat = createMat();
 
@@ -52,7 +52,7 @@ function createMat() {
     var green = new THREE.MeshPhongMaterial({color: 0x00B200, shininess: 0.40});
     var blue = new THREE.MeshPhongMaterial({color: 0x0066FF, shininess: 0.40});
     var yellow = new THREE.MeshPhongMaterial({color: 0xFFFF00, shininess: 0.40});
-    var orange = new THREE.MeshPhongMaterial({color: 0xFF9900, shininess: 0.40});
+    var orange = new THREE.MeshPhongMaterial({color: 0xFF00FF, shininess: 0.40});
 
     white.specular.setHex(0x010101);
     black.specular.setHex(0x010101);
