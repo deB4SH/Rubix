@@ -5,7 +5,7 @@ console.log("[DEBUG]:[START ROOT.JS]");
 var renderer;
 var scene;
 var camera;
-var cameraControl;
+var controls;
 var clock = new THREE.Clock();
 var cubeModels = []
 
@@ -17,6 +17,7 @@ function boot(){
     initGame();
     addToSite();
     createScene();
+    sceneRun();
     debug();
 }
 
@@ -25,12 +26,29 @@ function addToSite(){
     container.appendChild(renderer.domElement);
 }
 
+function sceneRun(){
+    requestAnimationFrame(sceneRun);
+    render();
+}
+
+function render(){
+    var delta = clock.getDelta();
+    //obj.position.copy(camera.position);
+    
+    var endAnimation = false;
+    
+    renderer.render(scene,camera);
+    if(endAnimation){
+        detachAndReset();
+    }
+}
+
 function initGame(){
     
     var container = document.getElementById("container");
     //setup for window
     canvasWidth = container.clientWidth;
-    canvasHeight = container.clientHeigth;
+    canvasHeight = container.clientHeight;
     aspect = canvasWidth / canvasHeight;
     //camera
     camera = new THREE.PerspectiveCamera(45,aspect,0.1,20000);
@@ -42,7 +60,7 @@ function initGame(){
     renderer.setClearColor(0xFFFFFF);
     renderer.setSize(canvasWidth,canvasHeight);
     //controls for cam
-    //cameraControl = new THREE.OrbitControls(camera, renderer.domElement);
+    controls = new THREE.OrbitControls( camera, renderer.domElement );
 }
 
 function createScene(){
@@ -50,7 +68,20 @@ function createScene(){
     scene = new THREE.Scene();
     
     initCubes();
+    createLights();
+    pivot = new THREE.Object3D();
+    scene.add(pivot);
     
+    for(var i=0;i<cubeModels.length; i++){
+        scene.add(cubeModels[i].get('element'));
+    }
+    
+}
+
+function createLights(){
+    //lights
+    var ambientLight = new THREE.AmbientLight(0x333333);
+    scene.add(ambientLight);
 }
 
 function initCubes(){
