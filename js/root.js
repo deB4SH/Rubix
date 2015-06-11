@@ -1,5 +1,6 @@
 //
 console.log("[DEBUG]:[START ROOT.JS]");
+if (!Detector.webgl) Detector.addGetWebGLMessage();
 
 //globals
 var renderer;
@@ -13,17 +14,14 @@ var canvasWidth = 0;
 var canvasHeight = 0;
 var aspect = 0;
 
+var obj;
+
 function boot(){
     initGame();
     addToSite();
     createScene();
     sceneRun();
-    debug();
-}
-
-function addToSite(){
-    var container = document.getElementById("container");
-    container.appendChild(renderer.domElement);
+    //debug();
 }
 
 function sceneRun(){
@@ -33,7 +31,7 @@ function sceneRun(){
 
 function render(){
     var delta = clock.getDelta();
-    //obj.position.copy(camera.position);
+    obj.position.copy(camera.position);
     
     var endAnimation = false;
     
@@ -52,7 +50,7 @@ function initGame(){
     aspect = canvasWidth / canvasHeight;
     //camera
     camera = new THREE.PerspectiveCamera(45,aspect,0.1,20000);
-    camera.position.set(0,0,0);
+    camera.position.set(400,800,800);
     //set renderer
     renderer = Detector.webgl? new THREE.WebGLRenderer({antialias: true}): errorPOP();
     renderer.gammaInput = true;
@@ -61,27 +59,7 @@ function initGame(){
     renderer.setSize(canvasWidth,canvasHeight);
     //controls for cam
     controls = new THREE.OrbitControls( camera, renderer.domElement );
-}
-
-function createScene(){
-    //create basic scene
-    scene = new THREE.Scene();
     
-    initCubes();
-    createLights();
-    pivot = new THREE.Object3D();
-    scene.add(pivot);
-    
-    for(var i=0;i<cubeModels.length; i++){
-        scene.add(cubeModels[i].get('element'));
-    }
-    
-}
-
-function createLights(){
-    //lights
-    var ambientLight = new THREE.AmbientLight(0x333333);
-    scene.add(ambientLight);
 }
 
 function initCubes(){
@@ -99,6 +77,49 @@ function initCubes(){
             })
         )
     }
+}
+
+
+function createScene(){
+    //create basic scene
+    scene = new THREE.Scene();
+    
+    initCubes();
+    createLights();
+    pivot = new THREE.Object3D();
+    scene.add(pivot);
+    
+    for(var i=0;i<cubeModels.length; i++){
+        scene.add(cubeModels[i].attributes.element);
+    }
+}
+
+function createLights(){
+    //lights
+    var ambientLight = new THREE.AmbientLight(0x333333);
+    scene.add(ambientLight);
+    
+    obj = new THREE.Object3D();
+    var sl = new THREE.SpotLight(0xFFFFFF, 0.99225);
+    sl.position.set(100,100,100);
+    sl.angle = 60 * 3.14 / 180;
+    sl.exponent = 100;
+    sl.target.position.set(0,0,0);
+    
+    var sl2 = new THREE.SpotLight(0xFFFFFF, 0.99225);
+    sl2.position.set(100,100,250);
+    sl2.angle = 60 * 3.14 / 180;
+    sl2.exponent = 100;
+    sl2.target.position.set(0,0,0);
+    
+    obj.add(sl);
+    obj.add(sl2);
+    scene.add(obj);
+}
+
+function addToSite(){
+    var container = document.getElementById("container");
+    container.appendChild(renderer.domElement);
 }
 
 function debug(){
